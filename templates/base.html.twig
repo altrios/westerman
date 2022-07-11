@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link href="{{ asset('main.scss') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <script>
+    @import "~bootstrap/scss/bootstrap";
+    </script>
+    <header class="container"><img src="https://westerman-associates.com/wp-content/uploads/2021/04/Icono.png" width="100px" alt="Symfony!" /></header>
+    <body>
+    
+        {% block body %}
+        
+            
+        {% endblock %}
+    </body>
+    <footer class="container">
+    <p>
+    <button class="btn" role="link" onclick="window.location='/'">
+    {# <a href="#" class="btn">hola</a> #}
+    Excel
+   
+    </button>
+     <button class="btn" role="link" onclick="window.location='/api/rest'">
+    {# <a href="#" class="btn">hola</a> #}
+    APiRest
+   
+    </button>
+     <button class="btn" role="link" onclick="window.location='/xml'">
+    {# <a href="#" class="btn">hola</a> #}
+    XML
+   
+    </button>
+    </p>
+    <span>Prueba hecha por: <b><a href='https://www.linkedin.com/in/fernando-martinez-b16b47b9/' target="_blank">Fernando Martínez</a></b></span>
+    </footer>
+</html>
