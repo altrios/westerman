@@ -1,22 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ExcelController!{% endblock %}
+{% block title %}
+  Hello ExcelController!
+{% endblock %}
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
-<style>
+  <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font:
+    18px/1.5 sans-serif; } .example-wrapper code { background: #F5F5F5; padding:
+    2px 6px; }
+  </style>
 
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="container my-4">
-
-    <p>*Por favor introducir la ruta ftp igual al ejemplo: <b>ftp://usuario:clave@url/path_del_archivo_csv</b></p>
-    <p>*En la casilla <b>"Hoja"</b> colocar la hoja que desea leer</p>
-    <p>*En la casilla <b>"Coordendas</b> por favor colocar la celda que desea leer</p>
-    {{form(form)}}
+  <div class="container my-4">
+    <p>
+      *Por favor introducir la ruta ftp igual al ejemplo: <b>ftp://usuario:clave@url/path_del_archivo_csv</b>
+    </p>
+    <p>
+      *En la casilla <b>"Hoja"</b> colocar la hoja que desea leer
+    </p>
+    <p>
+      *En la casilla <b>"Coordendas</b> por favor colocar la celda que desea leer
+    </p>
+    {{ form(form) }}
     <b class="col-4">
-    {{celda}}
+      {% for diference in celda %}
+        {{ diference }}
+      {% endfor %}
+      {# {{celda}} #}
     </b>
-</div>
+  </div>
 {% endblock %}

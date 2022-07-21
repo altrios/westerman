@@ -7,13 +7,16 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ApyRestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('edpoint',TextareaType::class,['label'=>'Introduzca el Endpoit de la api a consultar'])
+            ->add('edpoint', FileType::class, ['label'=>'Por favor cargar archivo CSV'])
+            ->add('submit', SubmitType::class, ['label' => 'Cargar'])
         ;
     }
 

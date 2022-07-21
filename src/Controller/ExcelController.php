@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ExcelController extends AbstractController
 {
@@ -33,45 +34,68 @@ class ExcelController extends AbstractController
         $ftp = new Ftp();
         $form = $this->createForm(ExcelType::class);
         $form->handleRequest($request);
-        $value='No hay valor asignado';
+        $diferences = [];
+        $diffCount = 0;
+        $value = 'No hay valor asignado';
         if ($form->isSubmitted() && $form->isValid()) {
-            $url = $request->get('excel')['excel'];
-            try {
-                $archivo = file_get_contents($url, 'r');
+            $url = $form['excel']->getData();
+            // try {
+            $archivo = file_get_contents($url, 'r');
 
-                $newFile = fopen('file.xlsx', 'w');
-                fwrite($newFile, $archivo);
-                // var_dump($newFile);
-                $rutaArchivo = 'file.xlsx';
-                $documento = IOFactory::load($rutaArchivo);
-                // var_dump($documento->getSheet(1))   ;
-                $valores = [];
-                $totalDeHojas = $documento->getSheetCount();
+            $newFile = fopen('uploadedfile.xlsx', 'w');
+            fwrite($newFile, $archivo);
+            // var_dump($newFile);
+            $rutaArchivo = 'uploadedfile.xlsx';
+            $documento = IOFactory::load($rutaArchivo);
+            // var_dump($documento->getSheet(1))   ;
+            $valores = [];
+            $totalDeHojas = $documento->getSheetCount();
+            $rutaArchivo = 'file.xlsx';
+            $olddocumento = IOFactory::load($rutaArchivo);
 
-                //     # Obtener hoja en el índice que vaya del ciclo
-                $hojaActual = $documento->getSheet(
-                    $request->get('excel')['hoja']-1
-                );
-                //     var_dump($request->get('excel')['coordenadas']);
+            $totalDeHojas = $documento->getSheetCount();
 
-                $coordenadas = $request->get('excel')['coordenadas'];
+            # Iterar hoja por hoja
+            for ($indiceHoja = 0; $indiceHoja < $totalDeHojas; $indiceHoja++) {
+                # Obtener hoja en el índice que vaya del ciclo
+                $hojaActual = $documento->getSheet($indiceHoja);
 
-                //     # Lo que hay en A1
-                $celda = $hojaActual->getCell($coordenadas);
+                # Iterar filas
+                foreach ($hojaActual->getRowIterator() as $fkey => $fila) {
+                    foreach ($fila->getCellIterator() as $ckey => $celda) {
+                        $valorRaw = $celda->getValue();
 
-                //     # El valor, así como está en el documento
-                $valorRaw = $celda->getValue();
-
-                $valores[$request->get('excel')['hoja']][
-                    'valorRaw'
-                ] = $valorRaw;
-                $value=$valores[$request->get('excel')['hoja']]['valorRaw'];
-            } catch (\Exception $e) {
+                        if (
+                            $olddocumento
+                                ->getSheet($indiceHoja)
+                                ->getCell($ckey . $fkey)
+                                ->getValue() != $valorRaw
+                        ) {
+                            $hoja = $indiceHoja + 1;
+                            $diferences[$diffCount] =
+                                'Se encontro una diferencia en la hoja N° ' .
+                                $hoja .
+                                ' Celda ' .
+                                $ckey .
+                                $fkey .
+                                ' Antes ' .
+                                $olddocumento
+                                    ->getSheet($indiceHoja)
+                                    ->getCell($ckey . $fkey)
+                                    ->getValue() .
+                                ' Ahora' .
+                                $valorRaw;
+                            $diffCount++;
+                            $newFile = fopen('file.xlsx', 'w');
+                            fwrite($newFile, $archivo);
+                        }
+                    }
+                }
+            }
+            if ($diffCount > 0) {
+                $value = $diferences;
             }
         }
-
-
-
 
         return $this->render('excel/index.html.twig', [
             'controller_name' => 'ExcelController',

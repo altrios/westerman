@@ -11,5 +11,10 @@
 <div class="example-wrapper">
 
     {{form(form)}}
+    <span><b>Diferencias encontradas:</b></span>
+    {% for row in deferences %}
+    {{row}}
+{% endfor %}
+   
 </div>
 {% endblock %}

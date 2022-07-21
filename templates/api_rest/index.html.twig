@@ -11,6 +11,9 @@
 <div class="example-wrapper">
 
     {{form(form)}}
-    {{response}}
+    {% for diference in diferences %}
+        {{diference}}
+    {% endfor %}
+    {# {{diferences}} #}
 </div>
 {% endblock %}

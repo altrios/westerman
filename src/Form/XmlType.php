@@ -14,7 +14,7 @@ class XmlType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('xml', FileType::class, ['label'=>'Por favor cargar archivo'])
+            ->add('xml', FileType::class, ['label'=>'Por favor cargar archivo XML'])
             ->add('submit', SubmitType::class, ['label' => 'Enviar'])
         ;
     }
